@@ -9,6 +9,9 @@ export const ThoughtTextArea: React.CSSProperties = {
   borderRadius: '8px',
   border: '2px solid #3943B7',
   fontFamily: 'Inter',
+  fontWeight: 'bold',
+  color: '#333',
+  fontSize: 16,
 }
 
 export const saveButton: React.CSSProperties = {
