@@ -1,0 +1,10 @@
+.thought::placeholder {
+  color: #caa8f5;
+  opacity: 1;
+  font-size: 16px;
+}
+
+.thought:focus {
+  border: 2px solid #caa8f5;
+  outline: 1px solid #caa8ff;
+}
