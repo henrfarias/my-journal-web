@@ -1,7 +1,7 @@
+import JournalPage from './pages/journal'
+
 function App() {
-  return <>
-    <h1>Initial page</h1>
-  </>
-} 
+  return <JournalPage />
+}
 
 export default App

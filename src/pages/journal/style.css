@@ -1,0 +1,139 @@
+#journal-wrapper {
+  display: flex;
+  height: 100%;
+  padding: 56px 128px;
+  padding-right: 16px;
+  overflow: hidden;
+}
+
+#journal-wrapper  .main-content {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+}
+
+#journal-wrapper textarea {
+  width: 100%;
+  min-height: 216px;
+  resize: none;
+
+  background-color: #F1F1F1;
+  padding: 32px;
+  color: #CAA8F5;
+
+  border-radius: 8px;
+  border: 2px solid #3943B7;
+}
+
+#journal-wrapper textarea::placeholder {
+  color: #CAA8F5;
+  opacity: 1;
+}
+
+#journal-wrapper .main-content .actions-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-top: 48px;
+}
+
+
+#journal-wrapper .main-content .actions-wrapper select {
+  width: 100%;
+  min-width: 80px;
+  max-width: 185px;
+
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #3943B7;
+
+  background-color: #F1F1F1;
+}
+
+#journal-wrapper .main-content .actions-wrapper select option {
+  font-size: 1rem;
+}
+
+#journal-wrapper .main-content .actions-wrapper  button {
+  border: none;
+  background-color: #3943B7;
+  color: #FFF;
+  padding: 16px 64px;
+  border-radius: 8px;
+  font-size: 1.5rem;
+
+  cursor: pointer;
+}
+
+#journal-wrapper .main-content .messages-wrapper {
+  margin-top: 48px;
+  overflow-y: auto;
+  padding-right: 16px;
+}
+
+#journal-wrapper .main-content .messages-wrapper .message {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #000;
+}
+
+#journal-wrapper .main-content .messages-wrapper .message:not(:first-child) {
+  margin-top: 8px;
+}
+
+#journal-wrapper .main-content .messages-wrapper .message .text {
+  color: #333333;
+  font-size: 1.25rem;
+}
+
+#journal-wrapper .main-content .messages-wrapper .message .text .icon {
+  color: #544B3D;
+  font-size: 2rem;
+}
+
+#journal-wrapper .main-content .messages-wrapper .message .time {
+  margin-left: auto;
+  font-size: 1.25rem;
+  color: #CAA8F5;
+}
+
+#journal-wrapper .aside-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  overflow-y: auto;
+  height: 100%;
+}
+
+#journal-wrapper .aside-content .tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60%;
+  border: 1px solid #000;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+#journal-wrapper .aside-content .tag:not(:first-child) {
+  margin-top: 24px;
+}
+
+#journal-wrapper .aside-content .tag span {
+  margin: auto
+}
+
+#journal-wrapper .aside-content .tag .circle {
+ width: 24px;
+ height: 24px;
+ border-radius: 100%;
+
+ flex-shrink: 0;
+}
+
+
+
+
+
