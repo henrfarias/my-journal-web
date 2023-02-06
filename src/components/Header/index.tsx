@@ -1,18 +1,19 @@
 import React from 'react'
-import './style.css'
+import { AccountButton } from './AccountButton'
+import { Title, HeaderContainer } from './style'
 
 interface HeaderProps {
-  title?: string
+  title: string
+  username: string
 }
 
 const Header: React.FC<HeaderProps> = ({ title }) => {
   return (
-    <header id="header">
-      <h1>{title}</h1>
-    </header>
+    <HeaderContainer>
+      <Title>{title}</Title>
+      <AccountButton name={'Henrique'} />
+    </HeaderContainer>
   )
 }
-
-Header.defaultProps = { title: '' }
 
 export default Header
