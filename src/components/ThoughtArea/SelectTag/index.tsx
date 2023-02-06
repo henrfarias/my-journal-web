@@ -1,0 +1,188 @@
+import * as React from 'react'
+import TextField from '@mui/material/TextField'
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogActions from '@mui/material/DialogActions'
+import Button from '@mui/material/Button'
+import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete'
+import { MuiColorInput } from 'mui-color-input'
+import styled from 'styled-components'
+
+const filter = createFilterOptions<TagOptions>()
+
+export default function FreeSoloCreateOptionDialog() {
+  const [value, setValue] = React.useState<TagOptions | null>(null)
+  const [open, toggleOpen] = React.useState(false)
+
+  const handleClose = () => {
+    setDialogValue({
+      tag: '',
+      hexColor: '',
+    })
+    toggleOpen(false)
+  }
+
+  const [dialogValue, setDialogValue] = React.useState({
+    tag: '',
+    hexColor: '',
+  })
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setValue({
+      tag: dialogValue.tag,
+      hexColor: dialogValue.hexColor,
+    })
+    handleClose()
+  }
+
+  return (
+    <React.Fragment>
+      <Autocomplete
+        value={value}
+        onChange={(event, newValue) => {
+          if (typeof newValue === 'string') {
+            setTimeout(() => {
+              toggleOpen(true)
+              setDialogValue({
+                tag: newValue,
+                hexColor: '',
+              })
+            })
+          } else if (newValue && newValue.inputValue) {
+            toggleOpen(true)
+            setDialogValue({
+              tag: newValue.inputValue,
+              hexColor: '',
+            })
+          } else {
+            setValue(newValue)
+          }
+        }}
+        filterOptions={(options, params) => {
+          const filtered = filter(options, params)
+
+          if (params.inputValue !== '') {
+            filtered.push({
+              inputValue: params.inputValue,
+              tag: `Adicionar "${params.inputValue}"`,
+            })
+          }
+
+          return filtered
+        }}
+        id="Tag"
+        options={tags}
+        getOptionLabel={(option) => {
+          // e.g value selected with enter, right from the input
+          if (typeof option === 'string') {
+            return option
+          }
+          if (option.inputValue) {
+            return option.inputValue
+          }
+          return option.tag
+        }}
+        selectOnFocus
+        clearOnBlur
+        handleHomeEndKeys
+        renderOption={(props, option) => (
+          <SelectItem {...props} style={{ ...props.style, '--color': option.hexColor } as any}>
+            {option.tag}
+          </SelectItem>
+        )}
+        sx={{
+          width: 300,
+          '& .MuiInputLabel-root': { color: `${value?.hexColor}` },
+          '& .MuiOutlinedInput-root': {
+            '& > fieldset': { borderColor: `${value?.hexColor}` },
+          },
+          '& .MuiOutlinedInput-root.Mui-focused': {
+            '& > fieldset': {
+              borderColor: `${value?.hexColor}`,
+            },
+          },
+        }}
+        freeSolo
+        renderInput={(params) => {
+          console.log(params.inputProps.value)
+          return <TextField {...params} label="Tag" variant="outlined" />
+        }}
+      />
+      <Dialog open={open} onClose={handleClose}>
+        <form onSubmit={handleSubmit}>
+          <DialogTitle>Adicionar nova tag</DialogTitle>
+          <DialogContent>
+            <DialogContentText>Crie uma nova tag para classificar seus pensamentos!</DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              value={dialogValue.tag}
+              onChange={(event) =>
+                setDialogValue({
+                  ...dialogValue,
+                  tag: event.target.value,
+                })
+              }
+              label="tag"
+              type="text"
+              variant="standard"
+              style={{ marginRight: 16 }}
+            />
+            <MuiColorInput
+              margin="dense"
+              id="hexColor"
+              value={dialogValue.hexColor}
+              onChange={(event) =>
+                setDialogValue({
+                  ...dialogValue,
+                  hexColor: event,
+                })
+              }
+              format="hex"
+              label="color"
+              variant="standard"
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancelar</Button>
+            <Button type="button" onClick={() => console.log(dialogValue)}>
+              Adicionar
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
+    </React.Fragment>
+  )
+}
+
+interface TagOptions {
+  inputValue?: string
+  tag: string
+  hexColor?: string
+}
+
+const tags: TagOptions[] = [
+  { tag: 'Felizes', hexColor: '#59953c' },
+  { tag: 'Tristes', hexColor: '#084f85' },
+  { tag: 'Pensativos', hexColor: '#d4e15a' },
+  { tag: 'Medrosos', hexColor: '#43b4ff' },
+  { tag: 'Corajosos', hexColor: '#ac710c' },
+  { tag: 'Safados', hexColor: '#980726' },
+]
+
+const SelectItem = styled.li`
+  &:before {
+    content: '';
+    width: 1ex;
+    height: 1ex;
+    margin-right: 1ex;
+    background-color: var(--color);
+    display: inline-block;
+    border-radius: 50%;
+    vertical-align: middle;
+  }
+`
