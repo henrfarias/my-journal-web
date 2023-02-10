@@ -12,7 +12,7 @@ import styled from 'styled-components'
 
 const filter = createFilterOptions<TagOptions>()
 
-export default function FreeSoloCreateOptionDialog() {
+export default function TagSelect() {
   const [value, setValue] = React.useState<TagOptions | null>(null)
   const [open, toggleOpen] = React.useState(false)
 

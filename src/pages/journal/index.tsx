@@ -1,6 +1,7 @@
 import * as React from 'react'
 import Header from '../../components/Header'
 import { ThoughtArea } from '../../components/ThoughtArea'
+import ThoughtList from '../../components/ThoughtList'
 import { InputArea, JournalContainer } from './style'
 
 function JournalPage() {
@@ -12,6 +13,7 @@ function JournalPage() {
           <ThoughtArea />
         </InputArea>
       </JournalContainer>
+      <ThoughtList userId={'fake-user-id'} />
     </>
   )
 }
