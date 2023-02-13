@@ -1,10 +1,11 @@
 import { ThoughtProvider } from './context/thought.context'
-import JournalPage from './pages/journal'
+import { RouterProvider } from 'react-router-dom'
+import { router } from './routes'
 
 function App() {
   return (
     <ThoughtProvider>
-      <JournalPage />
+      <RouterProvider router={router} />
     </ThoughtProvider>
   )
 }

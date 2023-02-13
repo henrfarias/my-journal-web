@@ -1,6 +1,7 @@
 import * as React from 'react'
 import Menu, { MenuUnstyledActions } from '@mui/base/MenuUnstyled'
 import { Popper, StyledListbox, StyledMenuItem as MenuItem, TriggerButton } from './style'
+import { useNavigate } from 'react-router-dom'
 
 export const AccountButton: React.FC<{ name: string }> = ({ name }) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
@@ -8,6 +9,7 @@ export const AccountButton: React.FC<{ name: string }> = ({ name }) => {
   const buttonRef = React.useRef<HTMLButtonElement>(null)
   const menuActions = React.useRef<MenuUnstyledActions>(null)
   const preventReopen = React.useRef(false)
+  const navigate = useNavigate()
 
   const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (preventReopen.current) {
@@ -46,10 +48,17 @@ export const AccountButton: React.FC<{ name: string }> = ({ name }) => {
 
   const logoutHandler = () => {
     return () => {
-      console.log(`Clicked on Logout button`)
+      localStorage.removeItem('token')
+      navigate('/login')
       close()
     }
   }
+
+  React.useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (token) return
+    navigate('/', { replace: true })
+  }, [])
 
   return (
     <div>

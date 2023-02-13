@@ -13,10 +13,10 @@ export const ThoughtItem: React.FC<{ item: ThoughtListData }> = ({ item }) => {
     setDisable(false)
   }
 
-  const handleInputBlur: React.FocusEventHandler = async () => {
+  const handleInputBlur: React.FocusEventHandler<HTMLTextAreaElement> = async () => {
     setDisable(true)
     if (body !== item.body) {
-      updateThought(body)
+      updateThought(item.id, body)
       await getList()
       item.body = body
     }

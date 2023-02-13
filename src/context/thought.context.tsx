@@ -1,9 +1,9 @@
 import * as React from 'react'
-import { instance, TOKEN } from '../services/axios.service'
+import { instance } from '../services/axios.service'
 
 export interface ThoughtContextType {
   saveThought: () => void
-  updateThought: (body: string) => void
+  updateThought: (id: string, body: string) => void
   thoughtMessageHandler: React.ChangeEventHandler<HTMLTextAreaElement>
   setTag: React.Dispatch<React.SetStateAction<{ name: string; hexColor: string } | null>>
   getList: () => Promise<void>
@@ -63,7 +63,7 @@ export const ThoughtProvider: React.FC<React.PropsWithChildren> = ({ children })
         thoughtPost.tagColor = tag.hexColor
       }
       await instance.post('/auth/thought', thoughtPost, {
-        headers: { Authorization: `Bearer ${TOKEN}` },
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       })
       setThought('')
       getList()
@@ -77,7 +77,7 @@ export const ThoughtProvider: React.FC<React.PropsWithChildren> = ({ children })
   const getList = async () => {
     try {
       const { data } = await instance.get<ThoughtList>('/auth/thought', {
-        headers: { Authorization: `Bearer ${TOKEN}` },
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       })
       setThoughtList(data.data)
     } catch (error) {
@@ -85,7 +85,7 @@ export const ThoughtProvider: React.FC<React.PropsWithChildren> = ({ children })
     }
   }
 
-  const updateThought = async (newBody: string) => {
+  const updateThought = async (id: string, newBody: string) => {
     try {
       if (newBody === '') {
         // TODO: toast erro
@@ -98,9 +98,13 @@ export const ThoughtProvider: React.FC<React.PropsWithChildren> = ({ children })
         thoughtPost.tag = tag.name
         thoughtPost.tagColor = tag.hexColor
       }
-      await instance.post('/auth/thought', thoughtPost, {
-        headers: { Authorization: `Bearer ${TOKEN}` },
-      })
+      await instance.put(
+        `/auth/thought/${id}`,
+        { data: thoughtPost },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        }
+      )
       // TODO: toast de sucesso
     } catch (error) {
       console.log('Erro ao salvar pensamento')

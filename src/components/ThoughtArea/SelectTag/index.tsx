@@ -9,7 +9,7 @@ import Button from '@mui/material/Button'
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete'
 import { MuiColorInput } from 'mui-color-input'
 import { SelectItem } from './style'
-import { instance, TOKEN } from '../../../services/axios.service'
+import { instance } from '../../../services/axios.service'
 import { ThoughtConsumer, ThoughtContextType } from '../../../context/thought.context'
 
 const filter = createFilterOptions<TagOptions>()
@@ -50,7 +50,7 @@ export const TagSelect: React.FC = () => {
 
   const listTags = async () => {
     try {
-      const { data: tags } = await instance.get('/auth/tag', { headers: { Authorization: `Bearer ${TOKEN}` } })
+      const { data: tags } = await instance.get('/auth/tag', { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
       setExistentTags(tags)
       console.log(tags)
     } catch (err) {
