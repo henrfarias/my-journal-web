@@ -10,17 +10,12 @@ import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete'
 import { MuiColorInput } from 'mui-color-input'
 import { SelectItem } from './style'
 import { instance, TOKEN } from '../../../services/axios.service'
+import { ThoughtConsumer, ThoughtContextType } from '../../../context/thought.context'
 
 const filter = createFilterOptions<TagOptions>()
 
-export const TagSelect: React.FC<{
-  setTag: React.Dispatch<
-    React.SetStateAction<{
-      name: string
-      hexColor: string
-    } | null>
-  >
-}> = ({ setTag }) => {
+export const TagSelect: React.FC = () => {
+  const { setTag } = ThoughtConsumer() as ThoughtContextType
   const [value, setValue] = React.useState<TagOptions | null>(null)
   const [open, toggleOpen] = React.useState(false)
   const [existentTags, setExistentTags] = React.useState([])
