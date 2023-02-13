@@ -8,35 +8,65 @@ import DialogActions from '@mui/material/DialogActions'
 import Button from '@mui/material/Button'
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete'
 import { MuiColorInput } from 'mui-color-input'
-import styled from 'styled-components'
+import { SelectItem } from './style'
+import { instance, TOKEN } from '../../../services/axios.service'
 
 const filter = createFilterOptions<TagOptions>()
 
-export default function TagSelect() {
+export const TagSelect: React.FC<{
+  setTag: React.Dispatch<
+    React.SetStateAction<{
+      name: string
+      hexColor: string
+    } | null>
+  >
+}> = ({ setTag }) => {
   const [value, setValue] = React.useState<TagOptions | null>(null)
   const [open, toggleOpen] = React.useState(false)
+  const [existentTags, setExistentTags] = React.useState([])
+
+  const handleSaveTag = () => {
+    setTag(dialogValue)
+    setValue({ name: dialogValue.name, hexColor: dialogValue.hexColor })
+    toggleOpen(false)
+  }
 
   const handleClose = () => {
     setDialogValue({
-      tag: '',
+      name: '',
       hexColor: '',
     })
     toggleOpen(false)
   }
 
   const [dialogValue, setDialogValue] = React.useState({
-    tag: '',
+    name: '',
     hexColor: '',
   })
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setValue({
-      tag: dialogValue.tag,
+      name: dialogValue.name,
       hexColor: dialogValue.hexColor,
     })
     handleClose()
   }
+
+  const listTags = async () => {
+    try {
+      const { data: tags } = await instance.get('/auth/tag', { headers: { Authorization: `Bearer ${TOKEN}` } })
+      setExistentTags(tags)
+      console.log(tags)
+    } catch (err) {
+      console.log('Erro ao listar tags')
+      // TODO: Toast de erro aqui.
+    }
+  }
+
+  React.useEffect(() => {
+    listTags()
+  }, [])
 
   return (
     <React.Fragment>
@@ -47,18 +77,21 @@ export default function TagSelect() {
             setTimeout(() => {
               toggleOpen(true)
               setDialogValue({
-                tag: newValue,
+                name: newValue,
                 hexColor: '',
               })
             })
           } else if (newValue && newValue.inputValue) {
             toggleOpen(true)
             setDialogValue({
-              tag: newValue.inputValue,
+              name: newValue.inputValue,
               hexColor: '',
             })
           } else {
+            console.log(newValue)
             setValue(newValue)
+            if (!newValue?.hexColor) setTag(null)
+            else setTag({ name: newValue!.name, hexColor: newValue.hexColor })
           }
         }}
         filterOptions={(options, params) => {
@@ -67,14 +100,14 @@ export default function TagSelect() {
           if (params.inputValue !== '') {
             filtered.push({
               inputValue: params.inputValue,
-              tag: `Adicionar "${params.inputValue}"`,
+              name: `Adicionar "${params.inputValue}"`,
             })
           }
 
           return filtered
         }}
         id="Tag"
-        options={tags}
+        options={existentTags}
         getOptionLabel={(option) => {
           // e.g value selected with enter, right from the input
           if (typeof option === 'string') {
@@ -83,14 +116,14 @@ export default function TagSelect() {
           if (option.inputValue) {
             return option.inputValue
           }
-          return option.tag
+          return option.name
         }}
         selectOnFocus
         clearOnBlur
         handleHomeEndKeys
         renderOption={(props, option) => (
           <SelectItem {...props} style={{ ...props.style, '--color': option.hexColor } as any}>
-            {option.tag}
+            {option.name}
           </SelectItem>
         )}
         sx={{
@@ -107,7 +140,6 @@ export default function TagSelect() {
         }}
         freeSolo
         renderInput={(params) => {
-          console.log(params.inputProps.value)
           return <TextField {...params} label="Tag" variant="outlined" />
         }}
       />
@@ -120,11 +152,11 @@ export default function TagSelect() {
               autoFocus
               margin="dense"
               id="name"
-              value={dialogValue.tag}
+              value={dialogValue.name}
               onChange={(event) =>
                 setDialogValue({
                   ...dialogValue,
-                  tag: event.target.value,
+                  name: event.target.value,
                 })
               }
               label="tag"
@@ -149,7 +181,7 @@ export default function TagSelect() {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancelar</Button>
-            <Button type="button" onClick={() => console.log(dialogValue)}>
+            <Button type="button" onClick={handleSaveTag}>
               Adicionar
             </Button>
           </DialogActions>
@@ -161,28 +193,6 @@ export default function TagSelect() {
 
 interface TagOptions {
   inputValue?: string
-  tag: string
+  name: string
   hexColor?: string
 }
-
-const tags: TagOptions[] = [
-  { tag: 'Felizes', hexColor: '#59953c' },
-  { tag: 'Tristes', hexColor: '#084f85' },
-  { tag: 'Pensativos', hexColor: '#d4e15a' },
-  { tag: 'Medrosos', hexColor: '#43b4ff' },
-  { tag: 'Corajosos', hexColor: '#ac710c' },
-  { tag: 'Safados', hexColor: '#980726' },
-]
-
-const SelectItem = styled.li`
-  &:before {
-    content: '';
-    width: 1ex;
-    height: 1ex;
-    margin-right: 1ex;
-    background-color: var(--color);
-    display: inline-block;
-    border-radius: 50%;
-    vertical-align: middle;
-  }
-`
