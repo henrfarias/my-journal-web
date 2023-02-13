@@ -7,13 +7,13 @@ import { InputArea, JournalContainer } from './style'
 function JournalPage() {
   return (
     <>
-      <Header title="My Journal" username="Henrique" />
+      <Header title="My Journal" username="Perfil" />
       <JournalContainer>
         <InputArea>
           <ThoughtArea />
         </InputArea>
       </JournalContainer>
-      <ThoughtList userId={'fake-user-id'} />
+      <ThoughtList />
     </>
   )
 }

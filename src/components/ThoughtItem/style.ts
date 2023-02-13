@@ -25,15 +25,17 @@ export const InputField = styled(TextareaAutosize)`
   margin-bottom: 2rem;
 `
 
-export const DateString = styled.span`
+export const DateString = styled.span<{ hexColor?: string }>(
+  ({ hexColor }) => `
   font-weight: bold;
   text-align: right;
-  color: #caa8f5;
+  color: ${hexColor ? hexColor : '#caa8f5'};
 `
+)
 
 export const Edited = styled.strong`
   margin-left: 10px;
-  color: #caa8f5AA;
+  color: #caa8f5aa;
 `
 
 export const Divider = styled.div<{ item: ThoughtListData }>(

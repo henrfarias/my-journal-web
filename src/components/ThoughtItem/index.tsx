@@ -1,22 +1,23 @@
 import { useEffect, useRef, useState } from 'react'
-import { formatDate, isSameSecondTime } from '../../services/date.service'
+import { ThoughtConsumer, ThoughtContextType } from '../../context/thought.context'
+import { formatDate } from '../../services/date.service'
 import { ThoughtListData } from '../../services/fakes'
-import { DateString, Divider, Edited, InputField, Item } from './style'
-import TagSelect from '../ThoughtArea/SelectTag'
+import { DateString, Divider, InputField, Item } from './style'
 
 export const ThoughtItem: React.FC<{ item: ThoughtListData }> = ({ item }) => {
   const [disable, setDisable] = useState(true)
   const [body, setBody] = useState(item.body)
   const inputRef = useRef<HTMLTextAreaElement>(null)
-
+  const { getList, updateThought } = ThoughtConsumer() as ThoughtContextType
   const handleDoubleClick: React.MouseEventHandler = () => {
     setDisable(false)
   }
 
-  const handleInputBlur: React.FocusEventHandler = () => {
+  const handleInputBlur: React.FocusEventHandler = async () => {
     setDisable(true)
     if (body !== item.body) {
-      // TODO: Fetch to persist body
+      updateThought(body)
+      await getList()
       item.body = body
     }
   }
@@ -39,10 +40,7 @@ export const ThoughtItem: React.FC<{ item: ThoughtListData }> = ({ item }) => {
         onBlur={handleInputBlur}
         disabled={disable}
       />
-      <DateString>
-        {formatDate(item.createAt)}
-        {isSameSecondTime(item.createAt, item.updatedAt) && <Edited>{'(editado)'}</Edited>}
-      </DateString>
+      <DateString hexColor={item.tag?.hexColor}>{formatDate(item.createAt)}</DateString>
       <Divider item={item} />
     </Item>
   )

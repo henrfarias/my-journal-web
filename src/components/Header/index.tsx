@@ -11,7 +11,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
   return (
     <HeaderContainer>
       <Title>{title}</Title>
-      <AccountButton name={'Henrique'} />
+      <AccountButton name={'Perfil'} />
     </HeaderContainer>
   )
 }

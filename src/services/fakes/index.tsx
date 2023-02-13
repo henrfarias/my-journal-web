@@ -24,7 +24,7 @@ export interface ThoughtListData {
   tag: Tag | null
 }
 
-export const getThoughtLists = async (userId: string): Promise<ThoughtList> => {
+export const getThoughtLists = async (): Promise<ThoughtList> => {
   return {
     page: 1,
     count: 3,
@@ -32,7 +32,7 @@ export const getThoughtLists = async (userId: string): Promise<ThoughtList> => {
       {
         id: '3471c3bb-739b-4605-9652-fb64d99b6047',
         body: 'Penso, logo existo. Mas estou em dúvidas se sei de algo... Acredito nada saber. Essa frase é de um filósofo muito famoso com síndrome do impostor;',
-        authorId: userId,
+        authorId: 'userId',
         tagId: null,
         attachments: null,
         createAt: '2023-02-05T03:50:54.191Z',
@@ -42,7 +42,7 @@ export const getThoughtLists = async (userId: string): Promise<ThoughtList> => {
       {
         id: '5c97ada8-a6d1-4acf-ba40-de7a03e7b720',
         body: 'Pensamento teste',
-        authorId: userId,
+        authorId: 'userId',
         tagId: '379d7283-bbbe-4359-a849-90653524ad63',
         attachments: 'url1,url2,url3',
         createAt: '2023-02-05T03:51:24.137Z',
@@ -50,7 +50,7 @@ export const getThoughtLists = async (userId: string): Promise<ThoughtList> => {
         tag: {
           id: '379d7283-bbbe-4359-a849-90653524ad63',
           name: 'Felizes',
-          authorId: userId,
+          authorId: 'userId',
           hexColor: '#f00c0c',
           createdAt: '2023-02-05T03:51:24.131Z',
           updatedAt: '2023-02-05T03:51:24.131Z',
